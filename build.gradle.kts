@@ -15,6 +15,6 @@ allprojects {
         mavenCentral()
 
         // TODO: Needed for Xposed API libs
-        jcenter()
+        maven(url = "https://api.xposed.info")
     }
 }

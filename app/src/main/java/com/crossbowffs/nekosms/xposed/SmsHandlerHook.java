@@ -317,6 +317,18 @@ public class SmsHandlerHook implements IXposedHookLoadPackage {
             new ConstructorHook());
     }
 
+    private void hookConstructor35(XC_LoadPackage.LoadPackageParam lpparam) {
+        Xlog.i("Hooking InboundSmsHandler constructor for Android v35+");
+        XposedHelpers.findAndHookConstructor(SMS_HANDLER_CLASS, lpparam.classLoader,
+            /*                 name */ String.class,
+            /*              context */ Context.class,
+            /*       storageMonitor */ TELEPHONY_PACKAGE + ".SmsStorageMonitor",
+            /*                phone */ TELEPHONY_PACKAGE + ".Phone",
+            /*               looper */ Looper.class,
+            /*         FeatureFlags */ TELEPHONY_PACKAGE + ".flags.FeatureFlags",
+            new ConstructorHook());
+    }    
+
     private void hookConstructor34(XC_LoadPackage.LoadPackageParam lpparam) {
         Xlog.i("Hooking InboundSmsHandler constructor for Android v34+");
         XposedHelpers.findAndHookConstructor(SMS_HANDLER_CLASS, lpparam.classLoader,
@@ -401,7 +413,9 @@ public class SmsHandlerHook implements IXposedHookLoadPackage {
     }
 
     private void hookConstructor(XC_LoadPackage.LoadPackageParam lpparam) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+            hookConstructor35(lpparam);
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
             hookConstructor34(lpparam);
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             hookConstructor30(lpparam);

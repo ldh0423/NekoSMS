@@ -14,18 +14,19 @@ dependencies {
     implementation("androidx.viewpager2:viewpager2:1.1.0")
     implementation("com.google.android.material:material:1.12.0")
     implementation("com.crossbowffs.remotepreferences:remotepreferences:0.8")
-    compileOnly("de.robv.android.xposed:api:53")
+    compileOnly("de.robv.android.xposed:api:82")
+    compileOnly("de.robv.android.xposed:api:82:sources")
 }
 
 android {
     namespace = "com.crossbowffs.nekosms"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         versionCode = 43
         versionName = "0.23.0-dev"
         minSdk = 19
-        targetSdk = 34
+        targetSdk = 35
         resourceConfigurations.addAll(listOf("en", "zh-rCN", "ru"))
         buildConfigField("int", "MODULE_VERSION", "19")
         buildConfigField("int", "DATABASE_VERSION", "12")
