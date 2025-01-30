@@ -26,7 +26,7 @@ android {
         versionCode = 43
         versionName = "0.23.0-dev"
         minSdk = 19
-        targetSdk = 35
+        targetSdk = 34
         resourceConfigurations.addAll(listOf("en", "zh-rCN", "ru"))
         buildConfigField("int", "MODULE_VERSION", "19")
         buildConfigField("int", "DATABASE_VERSION", "12")
