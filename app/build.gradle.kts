@@ -20,7 +20,7 @@ dependencies {
 
 android {
     namespace = "com.crossbowffs.nekosms"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         versionCode = 43

@@ -327,7 +327,31 @@ public class SmsHandlerHook implements IXposedHookLoadPackage {
             /*               looper */ Looper.class,
             /*         FeatureFlags */ TELEPHONY_PACKAGE + ".flags.FeatureFlags",
             new ConstructorHook());
-    }    
+    }
+
+    private static Class<?> findClassAny(ClassLoader cl, String... names) {
+        for (String n : names) {
+            Class<?> c = XposedHelpers.findClassIfExists(n, cl);
+            if (c != null) return c;
+        }
+        return null;
+    }
+
+    private void hookConstructor36(XC_LoadPackage.LoadPackageParam lpparam) {
+        Xlog.i("Hooking InboundSmsHandler constructor for Android v36+");
+        Class<?> clsFeatureFlags =findClassAny(lpparam.classLoader,
+                "com.android.internal.hidden_from_bootclasspath.com.android.internal.telephony.flags.FeatureFlags",
+                "com.android.internal.telephony.flags.FeatureFlags"
+        );
+        XposedHelpers.findAndHookConstructor(SMS_HANDLER_CLASS, lpparam.classLoader,
+                /*                 name */ String.class,
+                /*              context */ Context.class,
+                /*       storageMonitor */ TELEPHONY_PACKAGE + ".SmsStorageMonitor",
+                /*                phone */ TELEPHONY_PACKAGE + ".Phone",
+                /*               looper */ Looper.class,
+                /*         FeatureFlags */ clsFeatureFlags,
+                new ConstructorHook());
+    }
 
     private void hookConstructor34(XC_LoadPackage.LoadPackageParam lpparam) {
         Xlog.i("Hooking InboundSmsHandler constructor for Android v34+");
@@ -413,7 +437,10 @@ public class SmsHandlerHook implements IXposedHookLoadPackage {
     }
 
     private void hookConstructor(XC_LoadPackage.LoadPackageParam lpparam) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.BAKLAVA) {
+            hookConstructor36(lpparam);
+        }
+        else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
             hookConstructor35(lpparam);
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
             hookConstructor34(lpparam);
